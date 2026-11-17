@@ -84,6 +84,14 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(21, 94, 2
 .answer-button:disabled { cursor: default; opacity: 1; }
 .answer-button.correct { border-color: #12b76a; background: #ecfdf3; }
 .answer-button.incorrect { border-color: #f04438; background: #fef3f2; }
+.answer-text {
+  padding: 16px;
+  font-size: clamp(.95rem, 2.8vw, 1.1rem);
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
 .answer-image {
   display: block;
   width: 100%;
