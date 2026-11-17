@@ -4,33 +4,57 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#155eef">
-  <title>Web Game — ทดลองเล่น</title>
+  <title>Web Game — ลงทะเบียนและร่วมสนุก</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="หน้าแรก">MWA GAME ONLINE</a>
+    <a class="brand" href="./" aria-label="หน้าแรก">WEB GAME</a>
     <span class="connection-status" id="connectionStatus">กำลังเตรียมระบบ…</span>
   </header>
 
   <main class="page-shell">
     <section class="hero">
-      <h1>คุณรู้จักตราสัญลักษณ์พระแม่ธรณีดีแค่ไหน?</h1>
-      <p class="intro">
-        <p>🚨 มาร่วมเช็กความเข้าใจเรื่องการใช้งานตราสัญลักษณ์พระแม่ธรณีบิดมวยผม ผ่านคำถามสั้น ๆ ตอบง่าย ได้ความรู้ และยังมีสิทธิ์ลุ้นรับของรางวัลน่ารัก ๆ จากกิจกรรมนี้อีกด้วย ✨</p>
-       <p> 🎁 โดยผู้ที่ตอบคำถามได้ถูกต้องและครบถ้วน มีสิทธิ์ลุ้นรับของรางวัลเป็น “กระเป๋านุ่มนิ่ม” จำนวน 10 รางวัล (1 ชิ้น ต่อ 1 ท่าน)</p>
-        <p>⏳ ระยะเวลาร่วมกิจกรรม : 2-16 ธันวาคม 2569</p>
-       <p> 🔔 ประกาศผู้โชคดี : 18 ธันวาคม 2569 ทาง Facebook : MWA Connect</p>
-        <p>📍 ติดต่อรับของรางวัลได้ที่ กองบริหารภาพลักษณ์และแผนการสื่อสาร ฝ่ายสื่อสารองค์กร ชั้น 10 อาคารสุทธิอุทกากร โทร 1268</p>
+      <p class="eyebrow">WELCOME TO THE GAME</p>
+      <h1>ลงทะเบียนเพื่อร่วมสนุก</h1>
+      <p class="intro">กรอกข้อมูลให้ครบถ้วนก่อนเริ่มเล่นเกม ข้อมูลของคุณจะถูกใช้เพื่อบันทึกผลการเล่นและสรุปผลกิจกรรม</p>
     </section>
 
     <section class="panel" id="startPanel">
-      <h2>พร้อมเล่นหรือยัง?</h2>
-      <p class="muted">กรอกชื่อที่ต้องการให้แสดงในตารางคะแนน (ไม่ต้องสมัครสมาชิก)</p>
+      <h2>ข้อมูลผู้เข้าร่วม</h2>
+      <p class="muted">กรุณากรอกข้อมูลต่อไปนี้</p>
       <form id="startForm" class="stack">
-        <label for="playerName">ชื่อผู้เล่น</label>
-        <input id="playerName" name="playerName" type="text" maxlength="40" autocomplete="nickname" placeholder="เช่น น้ำใส" required>
-        <button class="button primary" type="submit">เริ่มเล่น</button>
+        <div class="field-group">
+          <label for="fullName">1. ชื่อ-นามสกุล <span class="required">*</span></label>
+          <input id="fullName" name="fullName" type="text" maxlength="120" autocomplete="name" placeholder="กรอกชื่อและนามสกุล" required>
+        </div>
+
+        <div class="field-group">
+          <label for="phone">2. เบอร์โทรศัพท์ <span class="required">*</span></label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" maxlength="25" autocomplete="tel" placeholder="เบอร์ภายในหรือเบอร์ส่วนตัว" required>
+          <small>สามารถกรอกเบอร์โทรศัพท์ภายในหรือเบอร์ส่วนตัวได้</small>
+        </div>
+
+        <div class="field-group">
+          <label for="email">3. อีเมล <span class="required">*</span></label>
+          <input id="email" name="email" type="email" maxlength="120" autocomplete="email" placeholder="example@email.com" required>
+        </div>
+
+        <div class="field-group">
+          <label for="department">4. หน่วยงาน <span class="required">*</span></label>
+          <input id="department" name="department" type="text" maxlength="120" autocomplete="organization" placeholder="ระบุหน่วยงาน / ฝ่าย / สำนัก" required>
+        </div>
+
+        <div class="privacy-note">
+          <p><strong>การใช้ข้อมูลส่วนบุคคล</strong></p>
+          <p>ข้อมูลที่กรอกจะใช้เพื่อการลงทะเบียนเข้าร่วมเกม บันทึกผลการเล่น และสรุปผลกิจกรรมเท่านั้น ก่อนเปิดใช้งานจริง ผู้จัดกิจกรรมควรเพิ่มประกาศความเป็นส่วนตัวที่ระบุผู้ควบคุมข้อมูล ระยะเวลาจัดเก็บ และช่องทางติดต่อให้ผู้เข้าร่วมทราบ</p>
+          <label class="consent-row" for="privacyAcknowledged">
+            <input id="privacyAcknowledged" name="privacyAcknowledged" type="checkbox" required>
+            <span>รับทราบวัตถุประสงค์การเก็บและใช้ข้อมูลข้างต้น <span class="required">*</span></span>
+          </label>
+        </div>
+
+        <button class="button primary" type="submit">ลงทะเบียนและเริ่มเล่น</button>
       </form>
     </section>
 
@@ -55,9 +79,10 @@
       <button class="button primary" id="playAgainButton" type="button">เล่นอีกครั้ง</button>
     </section>
 
+    <p class="notice">กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนเริ่มเล่น</p>
   </main>
 
-  <footer class="site-footer">Web Game Starter</footer>
+  <footer class="site-footer">Web Game</footer>
   <script type="module" src="./js/app.js"></script>
 </body>
 </html>
