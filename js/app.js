@@ -144,29 +144,37 @@ function renderQuestion() {
     button.className = "answer-button";
     button.setAttribute("aria-label", `ตัวเลือกที่ ${index + 1}`);
 
-    // Each answer is an image path string or an object such as:
-    // { image: "assets/images/choice-1.png", alt: "คำอธิบายภาพ" }
-    const imagePath = typeof answer === "string"
-      ? answer
-      : (answer?.image || answer?.src || "");
-    const imageAlt = typeof answer === "object" && answer?.alt
-      ? answer.alt
-      : `ตัวเลือกที่ ${index + 1}`;
+    // Mixed choices are supported:
+    // - Text: "ตัวเลือกข้อความ"
+    // - Image: { image: "assets/images/choice-01.png", alt: "คำอธิบายภาพ" }
+    // - Also accepts { text: "ตัวเลือกข้อความ" }
+    const isImageChoice = answer && typeof answer === "object"
+      && (typeof answer.image === "string" || typeof answer.src === "string");
 
-    const image = document.createElement("img");
-    image.className = "answer-image";
-    image.src = imagePath;
-    image.alt = imageAlt;
-    image.loading = "lazy";
-    image.decoding = "async";
+    if (isImageChoice) {
+      const imagePath = answer.image || answer.src;
+      const image = document.createElement("img");
+      image.className = "answer-image";
+      image.src = imagePath;
+      image.alt = answer.alt || `ภาพตัวเลือกที่ ${index + 1}`;
+      image.loading = "lazy";
+      image.decoding = "async";
 
-    image.addEventListener("error", () => {
-      button.classList.add("image-error");
-      button.setAttribute("aria-label", `โหลดรูปตัวเลือกที่ ${index + 1} ไม่สำเร็จ`);
-      console.error(`Could not load answer image: ${imagePath}`);
-    }, { once: true });
+      image.addEventListener("error", () => {
+        button.classList.add("image-error");
+        button.setAttribute("aria-label", `โหลดรูปตัวเลือกที่ ${index + 1} ไม่สำเร็จ`);
+        console.error(`Could not load answer image: ${imagePath}`);
+      }, { once: true });
 
-    button.append(image);
+      button.append(image);
+      button.setAttribute("aria-label", answer.alt || `ตัวเลือกภาพที่ ${index + 1}`);
+    } else {
+      const answerText = typeof answer === "string"
+        ? answer
+        : (answer?.text || `ตัวเลือกที่ ${index + 1}`);
+      button.classList.add("answer-text");
+      button.textContent = answerText;
+    }
     button.addEventListener("click", () => chooseAnswer(index));
     answerList.append(button);
   });
