@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#155eef">
+  <title>Web Game — ทดลองเล่น</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="หน้าแรก">WEB GAME</a>
+    <span class="connection-status" id="connectionStatus">กำลังเตรียมระบบ…</span>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero">
+      <p class="eyebrow">DEMO GAME</p>
+      <h1>ทดสอบระบบเกมและบันทึกคะแนน</h1>
+      <p class="intro">นี่เป็นเกมตัวอย่างสำหรับทดสอบการเชื่อมต่อ GitHub Pages กับ Firebase ก่อนเปลี่ยนเป็นเกมจริง</p>
+    </section>
+
+    <section class="panel" id="startPanel">
+      <h2>พร้อมเล่นหรือยัง?</h2>
+      <p class="muted">กรอกชื่อที่ต้องการให้แสดงในตารางคะแนน (ไม่ต้องสมัครสมาชิก)</p>
+      <form id="startForm" class="stack">
+        <label for="playerName">ชื่อผู้เล่น</label>
+        <input id="playerName" name="playerName" type="text" maxlength="40" autocomplete="nickname" placeholder="เช่น น้ำใส" required>
+        <button class="button primary" type="submit">เริ่มเล่น</button>
+      </form>
+    </section>
+
+    <section class="panel hidden" id="gamePanel" aria-live="polite">
+      <div class="game-meta">
+        <span id="questionCounter">ข้อ 1 / 5</span>
+        <span id="scoreCounter">คะแนน 0</span>
+      </div>
+      <div class="progress-track"><div class="progress-value" id="progressValue"></div></div>
+      <h2 class="question" id="questionText"></h2>
+      <div class="answers" id="answerList"></div>
+      <p class="feedback" id="feedback" role="status"></p>
+      <button class="button primary hidden" id="nextButton" type="button">ข้อต่อไป</button>
+    </section>
+
+    <section class="panel hidden" id="resultPanel" aria-live="polite">
+      <p class="eyebrow">YOUR RESULT</p>
+      <h2 id="resultTitle">เล่นจบแล้ว!</h2>
+      <p class="result-score" id="resultScore">0 / 100 คะแนน</p>
+      <p class="muted" id="saveStatus">กำลังบันทึกผลการเล่น…</p>
+      <button class="button secondary hidden" id="retrySaveButton" type="button">ลองบันทึกอีกครั้ง</button>
+      <button class="button primary" id="playAgainButton" type="button">เล่นอีกครั้ง</button>
+    </section>
+
+    <p class="notice">หมายเหตุ: เกมนี้เป็นต้นแบบทดสอบการบันทึกคะแนน ยังไม่มีหน้า Admin และระบบ Export Excel ในขั้นตอนนี้</p>
+  </main>
+
+  <footer class="site-footer">Web Game Starter</footer>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
