@@ -5,12 +5,13 @@ import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/1
 import { getFirestore } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY",
-  authDomain: "PASTE_YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "PASTE_YOUR_PROJECT_ID",
-  storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
-  messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID"
+  apiKey: "AIzaSyCzZ4G2zsPKKhZQhu5miAje-W2AENH0GYg",
+  authDomain: "web-game-score.firebaseapp.com",
+  projectId: "web-game-score",
+  storageBucket: "web-game-score.firebasestorage.app",
+  messagingSenderId: "482409246744",
+  appId: "1:482409246744:web:e3595bdde4cca69cd8536d",
+  measurementId: "G-8KJ3WFTCZE"
 };
 
 const app = initializeApp(firebaseConfig);
