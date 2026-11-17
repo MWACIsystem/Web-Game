@@ -1,5 +1,5 @@
 import { getAnonymousUser } from "./firebase.js";
-import { saveGameResult } from "./database.js";
+import { saveRegistration, saveGameResult } from "./database.js";
 import { questions } from "./game.js";
 
 const $ = (id) => document.getElementById(id);
@@ -8,7 +8,10 @@ const startPanel = $("startPanel");
 const gamePanel = $("gamePanel");
 const resultPanel = $("resultPanel");
 const startForm = $("startForm");
-const playerNameInput = $("playerName");
+const fullNameInput = $("fullName");
+const phoneInput = $("phone");
+const emailInput = $("email");
+const departmentInput = $("department");
 const questionText = $("questionText");
 const answerList = $("answerList");
 const questionCounter = $("questionCounter");
@@ -21,7 +24,7 @@ const saveStatus = $("saveStatus");
 const retrySaveButton = $("retrySaveButton");
 const playAgainButton = $("playAgainButton");
 
-let playerName = "";
+let playerProfile = null;
 let playerUid = "";
 let questionIndex = 0;
 let score = 0;
@@ -49,22 +52,60 @@ function setBusy(button, busy, busyText = "กำลังดำเนินก�
   }
 }
 
+function collectRegistration() {
+  const profile = {
+    fullName: fullNameInput.value.trim(),
+    phone: phoneInput.value.trim(),
+    email: emailInput.value.trim().toLowerCase(),
+    department: departmentInput.value.trim()
+  };
+
+  if (profile.fullName.length < 2 || profile.fullName.length > 120) {
+    throw new Error("กรุณากรอกชื่อ-นามสกุลให้ถูกต้อง");
+  }
+
+  const phoneDigits = profile.phone.replace(/\D/g, "");
+  if (phoneDigits.length < 4 || phoneDigits.length > 15 || !/^[0-9+() .-]+$/.test(profile.phone)) {
+    throw new Error("กรุณาตรวจสอบเบอร์โทรศัพท์ สามารถกรอกเบอร์ภายในหรือเบอร์ส่วนตัวได้");
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email) || profile.email.length > 120) {
+    throw new Error("กรุณากรอกอีเมลให้ถูกต้อง");
+  }
+
+  if (!profile.department || profile.department.length > 120) {
+    throw new Error("กรุณากรอกหน่วยงาน");
+  }
+
+  if (!$('privacyAcknowledged').checked) {
+    throw new Error("กรุณารับทราบวัตถุประสงค์การใช้ข้อมูลก่อนเริ่มเล่น");
+  }
+
+  return profile;
+}
+
 async function startGame(event) {
   event.preventDefault();
-  const cleanName = playerNameInput.value.trim();
-  if (!cleanName) {
-    playerNameInput.focus();
+
+  let profile;
+  try {
+    profile = collectRegistration();
+  } catch (error) {
+    alert(error.message);
     return;
   }
 
   const submitButton = startForm.querySelector("button[type='submit']");
-  setBusy(submitButton, true, "กำลังเชื่อมต่อ…");
-  setStatus("กำลังยืนยันตัวตนผู้เล่น…");
+  setBusy(submitButton, true, "กำลังลงทะเบียน…");
+  setStatus("กำลังบันทึกข้อมูลผู้เข้าร่วม…");
 
   try {
     const user = await getAnonymousUser();
     playerUid = user.uid;
-    playerName = cleanName;
+
+    await saveRegistration({ ...profile, playerUid });
+    playerProfile = profile;
+
     questionIndex = 0;
     score = 0;
     startedAt = Date.now();
@@ -74,12 +115,12 @@ async function startGame(event) {
     hide(startPanel);
     hide(resultPanel);
     show(gamePanel);
-    setStatus("พร้อมเล่น");
+    setStatus("ลงทะเบียนเรียบร้อย พร้อมเล่น");
     renderQuestion();
   } catch (error) {
-    console.error("Anonymous authentication failed:", error);
-    setStatus("เชื่อมต่อระบบไม่สำเร็จ");
-    alert("เริ่มเกมไม่ได้ กรุณาตรวจสอบการตั้งค่า Firebase Authentication และ Authorized domains");
+    console.error("Registration or authentication failed:", error);
+    setStatus("ลงทะเบียนไม่สำเร็จ");
+    alert(`ไม่สามารถลงทะเบียนได้: ${error.message || "กรุณาลองใหม่อีกครั้ง"}`);
   } finally {
     setBusy(submitButton, false);
   }
@@ -138,7 +179,7 @@ function finishGame() {
   show(resultPanel);
   durationSeconds = Math.max(0, Math.floor((Date.now() - startedAt) / 1000));
   resultScore.textContent = `${score} / ${questions.length * 20} คะแนน`;
-  $("resultTitle").textContent = `ขอบคุณที่เล่นนะ ${playerName}!`;
+  $("resultTitle").textContent = `ขอบคุณที่ร่วมเล่นนะ ${playerProfile.fullName}!`;
   progressValue.style.width = "100%";
   saveCompleted = false;
   retrySaveButton.classList.add("hidden");
@@ -153,14 +194,14 @@ async function saveResult() {
 
   try {
     await saveGameResult({
-      playerName,
+      ...playerProfile,
       playerUid,
       score,
       totalQuestions: questions.length,
       durationSeconds
     });
     saveCompleted = true;
-    saveStatus.textContent = "บันทึกคะแนนเรียบร้อยแล้ว ขอบคุณที่ร่วมเล่น!";
+    saveStatus.textContent = "บันทึกข้อมูลและคะแนนเรียบร้อยแล้ว ขอบคุณที่ร่วมกิจกรรม!";
     setStatus("บันทึกผลสำเร็จ");
   } catch (error) {
     console.error("Could not save game result:", error);
@@ -175,9 +216,15 @@ async function saveResult() {
 function resetGame() {
   hide(resultPanel);
   show(startPanel);
-  playerNameInput.value = playerName;
-  setStatus("พร้อมเล่น");
-  playerNameInput.focus();
+  if (playerProfile) {
+    fullNameInput.value = playerProfile.fullName;
+    phoneInput.value = playerProfile.phone;
+    emailInput.value = playerProfile.email;
+    departmentInput.value = playerProfile.department;
+    $("privacyAcknowledged").checked = true;
+  }
+  setStatus("พร้อมลงทะเบียนและเล่นอีกครั้ง");
+  fullNameInput.focus();
 }
 
 startForm.addEventListener("submit", startGame);
@@ -192,4 +239,4 @@ nextButton.addEventListener("click", () => {
 retrySaveButton.addEventListener("click", saveResult);
 playAgainButton.addEventListener("click", resetGame);
 
-setStatus("พร้อมเชื่อมต่อเมื่อเริ่มเล่น");
+setStatus("พร้อมลงทะเบียน");
