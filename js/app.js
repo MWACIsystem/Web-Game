@@ -142,7 +142,31 @@ function renderQuestion() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "answer-button";
-    button.textContent = answer;
+    button.setAttribute("aria-label", `ตัวเลือกที่ ${index + 1}`);
+
+    // Each answer is an image path string or an object such as:
+    // { image: "assets/images/choice-1.png", alt: "คำอธิบายภาพ" }
+    const imagePath = typeof answer === "string"
+      ? answer
+      : (answer?.image || answer?.src || "");
+    const imageAlt = typeof answer === "object" && answer?.alt
+      ? answer.alt
+      : `ตัวเลือกที่ ${index + 1}`;
+
+    const image = document.createElement("img");
+    image.className = "answer-image";
+    image.src = imagePath;
+    image.alt = imageAlt;
+    image.loading = "lazy";
+    image.decoding = "async";
+
+    image.addEventListener("error", () => {
+      button.classList.add("image-error");
+      button.setAttribute("aria-label", `โหลดรูปตัวเลือกที่ ${index + 1} ไม่สำเร็จ`);
+      console.error(`Could not load answer image: ${imagePath}`);
+    }, { once: true });
+
+    button.append(image);
     button.addEventListener("click", () => chooseAnswer(index));
     answerList.append(button);
   });
