@@ -194,8 +194,8 @@ function chooseAnswer(selectedIndex) {
   });
 
   if (selectedIndex === current.correctIndex) {
-    score += 20;
-    feedback.textContent = "ถูกต้อง! +20 คะแนน";
+    score += 1;
+    feedback.textContent = "ถูกต้อง! +1 คะแนน";
     feedback.classList.add("good");
   } else {
     feedback.textContent = "ยังไม่ถูก ลองข้อถัดไปนะ";
@@ -210,7 +210,7 @@ function finishGame() {
   hide(gamePanel);
   show(resultPanel);
   durationSeconds = Math.max(0, Math.floor((Date.now() - startedAt) / 1000));
-  resultScore.textContent = `${score} / ${questions.length * 20} คะแนน`;
+  resultScore.textContent = `${score} / ${questions.length} คะแนน`;
   $("resultTitle").textContent = `ขอบคุณที่ร่วมเล่นนะ ${playerProfile.fullName}!`;
   progressValue.style.width = "100%";
   saveCompleted = false;
