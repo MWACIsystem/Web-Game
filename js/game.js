@@ -27,8 +27,25 @@ export const questions = [
   },
   {
     question: "ข้อใดเป็นการใช้งานตราสัญลักษณ์พระแม่ธรณีบิดมวยผมที่ถูกต้อง?",
-    answers: ["", "", "", ""],
-    correctIndex: 0
+    answers: [
+      {
+        image: "assets/images/ผิด 1-100.jpg",
+        alt: "1"
+      },
+      {
+        image: "assets/images/ผิด 2-100.jpg",
+        alt: "2"
+      },
+      {
+        image: "assets/images/ผิด 3-100.jpg",
+        alt: "3"
+      },
+      {
+        image: "assets/images/พระแม่_NO STROKE.png",
+        alt: "4"
+      }
+    ],
+    correctIndex: 3
   },
   {
     question: "รูปแบบอักษรของการประปานครหลวงคือข้อใด?",
