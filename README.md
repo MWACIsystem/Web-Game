@@ -1,41 +1,73 @@
-# Web Game — Registration Update
+# Web Game — Image-only Choices Update
 
-แพ็กเกจนี้เพิ่มหน้าลงทะเบียนผู้เล่นให้กับโปรเจกต์ Web Game เดิม โดยยังใช้ Firebase Anonymous Authentication และคำถามจาก `js/game.js` เหมือนเดิม
+ชุดนี้เปลี่ยนตัวเลือกคำตอบจากข้อความเป็นรูปภาพอย่างเดียว โดยคงหน้า Registration, Firebase และการบันทึกคะแนนของโปรเจกต์เดิมไว้
 
-## ข้อมูลที่เก็บ
-- ชื่อ-นามสกุล
-- เบอร์โทรศัพท์ (เบอร์ภายในหรือเบอร์ส่วนตัว)
-- อีเมล
-- หน่วยงาน
+## ไฟล์ที่ต้องแทนที่ใน GitHub
 
-ข้อมูลโปรไฟล์จะถูกบันทึกไว้ใน `players/{playerUid}` และเมื่อเล่นจบ จะบันทึกข้อมูลผู้เล่นซ้ำเป็น snapshot ใน `gameResults` พร้อมคะแนน เพื่อให้นำไปทำรายงาน/Excel ได้สะดวกในภายหลัง
+1. `style.css` — แทนที่ไฟล์เดิมที่ Root ของ Repository
+2. `js/app.js` — แทนที่ไฟล์เดิมในโฟลเดอร์ `js`
 
-## วิธีติดตั้ง
-1. สำรองไฟล์เดิมใน GitHub ก่อน
-2. คัดลอก `index.html`, `style.css`, `js/app.js` และ `js/database.js` จากแพ็กเกจนี้ไปแทนไฟล์เดิมใน Repository โดยรักษาโครงสร้างโฟลเดอร์ไว้
-3. **ไม่ต้องแทนที่ `js/firebase.js`** เพราะไฟล์เดิมมี Firebase config ของโปรเจกต์คุณอยู่แล้ว
-4. **ไม่ต้องแทนที่ `js/game.js`** เพราะไฟล์นี้เก็บคำถามเดิมของคุณ
-5. เปิด Firestore Database > Rules แล้วแทนที่ Rules เดิมด้วยเนื้อหาใน `firestore.rules.txt` จากนั้นกด Publish
-6. Commit changes และรอ GitHub Pages deploy
-7. เปิดเกมแบบ hard refresh แล้วทดสอบลงทะเบียนและเล่นให้จบหนึ่งรอบ
+ไม่ต้องแทนที่ `index.html`, `js/firebase.js` หรือ `js/database.js` สำหรับการเปลี่ยนตัวเลือกเป็นรูปภาพ
 
-## โครงสร้างไฟล์หลังอัปเดต
-```text
-web-game/
-├── index.html             (แทนที่)
-├── style.css              (แทนที่)
-├── firestore.rules.txt    (ใช้คัดลอกไป Firestore Rules ไม่ต้องอัปโหลดก็ได้)
-└── js/
-    ├── app.js             (แทนที่)
-    ├── database.js        (แทนที่)
-    ├── firebase.js        (เก็บไฟล์เดิม)
-    └── game.js            (เก็บไฟล์เดิม)
+## เปลี่ยนข้อมูลคำถามใน `js/game.js`
+
+ตัวอย่างโครงสร้างอยู่ใน `examples/game.js.image-choice.example`
+
+ใช้ `answers` เป็นรายการรูปภาพ 4 รูป เช่น:
+
+```js
+export const questions = [
+  {
+    question: "เลือกภาพที่ตรงกับคำตอบ",
+    answers: [
+      { image: "assets/images/choice-01.png", alt: "ตัวเลือกภาพที่ 1" },
+      { image: "assets/images/choice-02.png", alt: "ตัวเลือกภาพที่ 2" },
+      { image: "assets/images/choice-03.png", alt: "ตัวเลือกภาพที่ 3" },
+      { image: "assets/images/choice-04.png", alt: "ตัวเลือกภาพที่ 4" }
+    ],
+    correctIndex: 2
+  }
+];
 ```
 
-## ข้อควรทราบ
-- ผู้เล่นยังใช้ Anonymous Authentication โดยไม่ต้องสมัครสมาชิก
-- การลงทะเบียนจะบันทึกโปรไฟล์โดยใช้ Firebase UID เป็น Document ID
-- การเล่นแต่ละรอบจะสร้างเอกสารใหม่ใน `gameResults` พร้อมข้อมูลลงทะเบียนและคะแนน
-- Firestore Rules ชุดนี้ไม่อนุญาตให้ผู้เล่นอ่านข้อมูลผู้เล่นหรือคะแนนทั้งหมด การทำหน้า Admin/Export ต้องเพิ่มสิทธิ์อ่านสำหรับ Admin ที่ยืนยันตัวตนแล้วในภายหลัง
-- โค้ดฝั่ง Browser ยังไม่ใช่ระบบป้องกันการโกงคะแนนแบบสมบูรณ์ หากเป็นการแข่งขันที่มีรางวัล ควรตรวจคะแนนฝั่ง server ด้วย
-- ก่อนใช้งานจริง ให้ผู้จัดกิจกรรมจัดทำประกาศความเป็นส่วนตัวให้ครบถ้วน เช่น ผู้ควบคุมข้อมูล วัตถุประสงค์ ฐานกฎหมาย ระยะเวลาจัดเก็บ สิทธิของเจ้าของข้อมูล และช่องทางติดต่อ แล้วปรับข้อความบนฟอร์มให้ตรงกับประกาศนั้น
+`correctIndex` เริ่มนับจาก 0: 0 คือรูปแรก, 1 คือรูปที่สอง, 2 คือรูปที่สาม และ 3 คือรูปที่สี่
+
+ระบบยังรองรับการเขียน `answers` เป็น path string ได้ด้วย เช่น `"assets/images/choice-01.png"` แต่รูปแบบ object ที่มี `image` และ `alt` แนะนำกว่าเพื่อการเข้าถึง (accessibility)
+
+## เพิ่มรูปภาพเข้า GitHub
+
+สร้างโฟลเดอร์ `assets/images/` ที่ Root ของ Repository แล้วอัปโหลดรูปเข้าไป เช่น:
+
+```text
+web-game/
+├── index.html
+├── style.css
+├── assets/
+│   └── images/
+│       ├── choice-01.png
+│       ├── choice-02.png
+│       ├── choice-03.png
+│       └── choice-04.png
+└── js/
+    ├── app.js
+    ├── database.js
+    ├── firebase.js
+    └── game.js
+```
+
+ข้อควรระวัง:
+- ใช้ path แบบ `assets/images/choice-01.png` ไม่ต้องขึ้นต้นด้วย `/` เพื่อให้ทำงานบน GitHub Pages ที่ใช้ชื่อ Repository เป็น path ได้
+- ชื่อตัวพิมพ์เล็ก/ใหญ่ต้องตรงกับชื่อไฟล์จริง เช่น `Choice-01.png` ไม่เหมือน `choice-01.png`
+- แนะนำไฟล์ PNG, JPG หรือ WebP และปรับขนาดให้เหมาะกับการแสดงผลบนมือถือ
+- รูปในตัวเลือกจะไม่มีข้อความกำกับบนหน้าจอ แต่มี `alt` สำหรับโปรแกรมอ่านหน้าจอ
+
+## ติดตั้งบน GitHub
+
+1. สำรองไฟล์เดิมไว้ก่อน
+2. แทนที่ `style.css` และ `js/app.js` ตามตำแหน่งเดิม
+3. แก้เนื้อหา `js/game.js` ให้ใช้ path รูปตามตัวอย่าง (อย่าแทนที่ไฟล์นี้โดยไม่สำรองคำถามเดิม)
+4. อัปโหลดรูปภาพไปที่ `assets/images/`
+5. Commit changes และรอ GitHub Pages เผยแพร่
+6. เปิดเว็บแล้ว hard refresh ด้วย `Ctrl + Shift + R`
+
+Firestore Rules และ Firebase Configuration ไม่ต้องเปลี่ยนสำหรับฟังก์ชันตัวเลือกแบบรูปภาพนี้
