@@ -1,39 +1,22 @@
-# Web Game – Mixed Image/Text Choices Update
+WEB GAME - TEXT UPDATES FROM PRESENTATION1.PDF
 
-This patch lets each answer choice be either regular text or an image. You can mix them within one question.
+Replace only these two files in your existing GitHub repository:
+1. index.html (repository root)
+2. js/app.js
 
-## Install
+No CSS changes are required. The existing style.css already styles .hero, .eyebrow, h1 and .intro.
 
-Replace these existing files in your GitHub repository:
+What changed:
+- Added IDs to the existing hero eyebrow, headline and subheadline so app.js can change them during the game lifecycle.
+- After successful registration, the hero headline/subheadline change to the campaign copy from the PDF. The existing eyebrow is hidden during gameplay.
+- When the game finishes, the hero changes to the thank-you headline/subheadline from the PDF.
+- Removed the notice paragraph below the panels.
+- Changed the footer text to "ฝสอ. | โทร 1268".
+- Hid the saveStatus paragraph visually as requested in the PDF, but kept the element in the DOM because app.js still writes save progress/error text to it.
+- Kept the existing result title, score, retry-save behavior, play-again button, header, registration form, game, Firebase logic and score logic unchanged.
+- When the player clicks Play Again, the original registration hero text is restored.
 
-- `js/app.js` → replace with `js/app.js` from this ZIP
-- `style.css` → replace with `style.css` from this ZIP
-
-Keep your existing `index.html`, `js/firebase.js`, `js/database.js`, and `js/game.js`.
-
-## How to create a mixed question
-
-In `js/game.js`, use a normal string for text answers and an object with `image` for an image answer:
-
-```js
-export const questions = [
-  {
-    question: "Which item is the water meter?",
-    answers: [
-      "Water bottle",
-      { image: "assets/images/choice-02.png", alt: "Water meter" },
-      "Water glass",
-      "Water tank"
-    ],
-    correctIndex: 1
-  }
-];
-```
-
-- Text string → displays as a normal text choice.
-- `{ image: "..." }` → displays as an image choice.
-- `correctIndex` starts at 0.
-- Put images in the repository folder `assets/images/`.
-- Use paths relative to the website root, for example `assets/images/choice-02.png`.
-
-The existing plain-text questions will continue to work without changes. Existing image-only question objects using `{ image: "..." }` will also work.
+IMPORTANT:
+- Keep your existing js/firebase.js, js/database.js, js/game.js and style.css.
+- Do not replace Firestore Rules.
+- After committing, hard-refresh the GitHub Pages site (Ctrl+Shift+R).
