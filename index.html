@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#155eef">
-  <title>Web Game — ลงทะเบียนและร่วมสนุก</title>
+  <title>MWA BRAND GAME ONLINE — ลงทะเบียนและร่วมสนุก</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="หน้าแรก">WEB GAME</a>
+    <a class="brand" href="./" aria-label="หน้าแรก">MWA BRAND GAME ONLINE</a>
     <span class="connection-status" id="connectionStatus">กำลังเตรียมระบบ…</span>
   </header>
 
   <main class="page-shell">
     <section class="hero">
-      <p class="eyebrow">WELCOME TO THE GAME</p>
-      <h1>ลงทะเบียนเพื่อร่วมสนุก</h1>
-      <p class="intro">กรอกข้อมูลให้ครบถ้วนก่อนเริ่มเล่นเกม ข้อมูลของคุณจะถูกใช้เพื่อบันทึกผลการเล่นและสรุปผลกิจกรรม</p>
+      <p class="eyebrow" id="heroEyebrow">WELCOME TO THE GAME</p>
+      <h1 id="heroTitle">ลงทะเบียนเพื่อร่วมสนุก</h1>
+      <p class="intro" id="heroIntro">กรอกข้อมูลให้ครบถ้วนก่อนเริ่มเล่นเกม ข้อมูลของคุณจะถูกใช้เพื่อบันทึกผลการเล่นและสรุปผลกิจกรรม</p>
     </section>
 
     <section class="panel" id="startPanel">
@@ -74,15 +74,13 @@
       <p class="eyebrow">YOUR RESULT</p>
       <h2 id="resultTitle">เล่นจบแล้ว!</h2>
       <p class="result-score" id="resultScore">0 / 100 คะแนน</p>
-      <p class="muted" id="saveStatus">กำลังบันทึกผลการเล่น…</p>
+      <p class="muted hidden" id="saveStatus" aria-live="polite">กำลังบันทึกผลการเล่น…</p>
       <button class="button secondary hidden" id="retrySaveButton" type="button">ลองบันทึกอีกครั้ง</button>
       <button class="button primary" id="playAgainButton" type="button">เล่นอีกครั้ง</button>
     </section>
-
-    <p class="notice">กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนเริ่มเล่น</p>
   </main>
 
-  <footer class="site-footer">Web Game</footer>
+  <footer class="site-footer">ฝสอ. | โทร 1268</footer>
   <script type="module" src="./js/app.js"></script>
 </body>
 </html>
