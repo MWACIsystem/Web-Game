@@ -12,6 +12,9 @@ const fullNameInput = $("fullName");
 const phoneInput = $("phone");
 const emailInput = $("email");
 const departmentInput = $("department");
+const heroEyebrow = $("heroEyebrow");
+const heroTitle = $("heroTitle");
+const heroIntro = $("heroIntro");
 const questionText = $("questionText");
 const answerList = $("answerList");
 const questionCounter = $("questionCounter");
@@ -23,6 +26,24 @@ const resultScore = $("resultScore");
 const saveStatus = $("saveStatus");
 const retrySaveButton = $("retrySaveButton");
 const playAgainButton = $("playAgainButton");
+
+const defaultHeroContent = {
+  eyebrow: "WELCOME TO THE GAME",
+  title: "ลงทะเบียนเพื่อร่วมสนุก",
+  intro: "กรอกข้อมูลให้ครบถ้วนก่อนเริ่มเล่นเกม ข้อมูลของคุณจะถูกใช้เพื่อบันทึกผลการเล่นและสรุปผลกิจกรรม"
+};
+
+const gameHeroContent = {
+  eyebrow: "",
+  title: "คุณรู้จักตราสัญลักษณ์พระแม่ธรณีบิดมวยผมดีแค่ไหน?",
+  intro: "🔔 มาร่วมเช็กความเข้าใจเรื่องการใช้งานตราสัญลักษณ์พระแม่ธรณีบิดมวยผม ผ่านคำถามสั้น ๆ ตอบง่าย ได้ความรู้ และยังมีสิทธิ์ลุ้นรับของรางวัลน่ารัก ๆ จากกิจกรรมนี้อีกด้วย ✨"
+};
+
+const resultHeroContent = {
+  eyebrow: "",
+  title: "ขอบคุณที่ร่วมกิจกรรม",
+  intro: "เราได้ทำการบันทึกข้อมูลและคะแนนเรียบร้อยแล้ว"
+};
 
 let playerProfile = null;
 let playerUid = "";
@@ -39,6 +60,13 @@ function hide(element) { element.classList.add("hidden"); }
 
 function setStatus(message) {
   statusEl.textContent = message;
+}
+
+function setHeroContent(content) {
+  heroEyebrow.textContent = content.eyebrow;
+  heroEyebrow.classList.toggle("hidden", !content.eyebrow);
+  heroTitle.textContent = content.title;
+  heroIntro.textContent = content.intro;
 }
 
 function setBusy(button, busy, busyText = "กำลังดำเนินการ…") {
@@ -77,7 +105,7 @@ function collectRegistration() {
     throw new Error("กรุณากรอกหน่วยงาน");
   }
 
-  if (!$('privacyAcknowledged').checked) {
+  if (!$("privacyAcknowledged").checked) {
     throw new Error("กรุณารับทราบวัตถุประสงค์การใช้ข้อมูลก่อนเริ่มเล่น");
   }
 
@@ -112,6 +140,7 @@ async function startGame(event) {
     saveCompleted = false;
     isSaving = false;
 
+    setHeroContent(gameHeroContent);
     hide(startPanel);
     hide(resultPanel);
     show(gamePanel);
@@ -208,6 +237,7 @@ function chooseAnswer(selectedIndex) {
 
 function finishGame() {
   hide(gamePanel);
+  setHeroContent(resultHeroContent);
   show(resultPanel);
   durationSeconds = Math.max(0, Math.floor((Date.now() - startedAt) / 1000));
   resultScore.textContent = `${score} / ${questions.length} คะแนน`;
@@ -248,6 +278,7 @@ async function saveResult() {
 function resetGame() {
   hide(resultPanel);
   show(startPanel);
+  setHeroContent(defaultHeroContent);
   if (playerProfile) {
     fullNameInput.value = playerProfile.fullName;
     phoneInput.value = playerProfile.phone;
